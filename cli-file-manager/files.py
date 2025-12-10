@@ -98,7 +98,7 @@ def touch(filename, directory=None):
         return False
     
 
-def rm(filename, directory=None, Force=None):
+def rm(filename, directory=None, Force=None, Recursive=False):
     # Building the filepath
     if directory != None:
         filepath = os.path.join(directory, filename)
@@ -115,12 +115,20 @@ def rm(filename, directory=None, Force=None):
         print(f"Error: `{filepath}` does not exist!")
         return False
     
-    # Rejecting directories (only deleting files not directories)
+    # Handling Directories 
     if os.path.isdir(filepath):
-        print(f"Error: `{filepath}` is a directory, not a file!")
-        return False
+        if not Recursive:
+            print(f"Error: '{filepath}' is a directory. Use rm -r to remove")
+            return False
+        
+        if not Force:
+            confirm = input(f"Remove directory '{filepath}' and all contents? (y/n): ")
+            if confirm.lower() != 'y':
+             print("Cancelled")
+             return False
+
     
-    # Checking for write protection
+    # Checking for write protection & Handling Files
     if not Force == True and not os.acces(filepath, os.R_OK):
         confirm = input(f"Remove write-protected file '{filepath}'? (y/n): ")
         if confirm.lower() != 'y':
