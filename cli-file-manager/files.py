@@ -21,8 +21,8 @@ def display_file(filename, directory=None):
         print(f" Error: `{filepath}` is a directory, not a file!")
         return False
     
-   # Checking for read permission from file system
-    if not os.access(filename, os.R_OK):
+    # Checking for read permission from file system
+    if not os.access(filepath, os.R_OK):
         print(f"No read permission for {filepath}")
         return False
     
@@ -98,7 +98,7 @@ def touch(filename, directory=None):
         return False
     
 
-def rm(filename, directory=None, Force=None, Recursive=False):
+def rm(filename, directory=None, force=None, recursive=False):
     # Building the filepath
     if directory != None:
         filepath = os.path.join(directory, filename)
@@ -109,27 +109,39 @@ def rm(filename, directory=None, Force=None, Recursive=False):
     filepath = os.path.normpath(filepath)
 
     # Checking if filepath exists
-    if not os.path.isdir(filepath):
-        if Force != None:
+    if not os.path.exists(filepath):
+        if force != None:
             return True
         print(f"Error: `{filepath}` does not exist!")
         return False
     
     # Handling Directories 
     if os.path.isdir(filepath):
-        if not Recursive:
+        if not recursive:
             print(f"Error: '{filepath}' is a directory. Use rm -r to remove")
             return False
         
-        if not Force:
+        if not force:
             confirm = input(f"Remove directory '{filepath}' and all contents? (y/n): ")
             if confirm.lower() != 'y':
              print("Cancelled")
              return False
+        
+        # Remove directory and contents
+        try:
+            shutil.rmtree(filepath)
+            print(f"Removed directory: '{filepath}'")
+            return True
+        except PermissionError:
+            print(f"Error: Permission denied for '{filepath}'")
+            return False
+        except OSError as e:
+            print(f"Error: {e}")
+            return False
 
     
-    # Checking for write protection & Handling Files
-    if not Force == True and not os.acces(filepath, os.R_OK):
+    # Checking for write protection (For files)
+    if not force and not os.access(filepath, os.W_OK):
         confirm = input(f"Remove write-protected file '{filepath}'? (y/n): ")
         if confirm.lower() != 'y':
             print("Cancelled")
@@ -146,10 +158,9 @@ def rm(filename, directory=None, Force=None, Recursive=False):
     except OSError as e:
         print(f"Error: {e}")
         return False
+    
 
-
-
-def mv(filename, directory=None, Force=None):
+def mv(filename, destination, directory=None, force=False):
     # Building the source path
     if directory != None:
         source = os.path.join(directory, filename)
@@ -159,44 +170,47 @@ def mv(filename, directory=None, Force=None):
     # Normalizing the source path
     source = os.path.normpath(source)
 
-     # Check if source exists
+    # Check if source exists
     if not os.path.exists(source):
         print(f"Error: '{source}' does not exist")
         return False
 
     # Reject directories
-    if not os.path.isdir(source):
+    if os.path.isdir(source):
         print(f"Error: '{source}' is a directory")
         return False
     
     # Building the destination path
-    dest = os.path.normapth(dest)
+    if directory != None:
+        dest = os.path.join(directory, destination)
+    else:
+        dest = os.path.join(os.getcwd(), destination)
+    
+    dest = os.path.normpath(dest)
 
-    #if destination is a directory, if yes move the file
+    # If destination is a directory, move the file into it
     if os.path.isdir(dest):
         dest = os.path.join(dest, os.path.basename(source))
 
-    
     # Check if destination already exists
-    if not os.path.exists(dest):
-        if not Force:
-            confirm = input(f" '{dest}' already exists. Overwrite? (y/n): ")
-            if confirm.lower != 'y':
-                print(f"Cancelled")
+    if os.path.exists(dest):
+        if not force:
+            confirm = input(f"'{dest}' already exists. Overwrite? (y/n): ")
+            if confirm.lower() != 'y':
+                print("Cancelled")
                 return False
             
-     # Handling actual move & Error handling 
+    # Handling actual move & Error handling 
     try:
         shutil.move(source, dest)
-        print(f"Moved: '{source} -> '{dest}' ")
+        print(f"Moved: '{source}' -> '{dest}'")
         return True
     except PermissionError:
-         print(f"Error: Permission denied")
-         return False
+        print(f"Error: Permission denied")
+        return False
     except OSError as e:
-         print(f"Error: {e}")
-         return False
-        
+        print(f"Error: {e}")
+        return False
     
 
         
