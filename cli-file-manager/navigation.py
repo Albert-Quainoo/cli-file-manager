@@ -1,6 +1,7 @@
 import os
 
 # Shows current directory
+
 def pwd(directory=None):
     if directory != None:
         print(f"Current Directory: {directory}")
@@ -8,6 +9,7 @@ def pwd(directory=None):
         print(f"Current Directory: {os.getcwd()}")        
 
 # List contents in current directory
+
 def ls(directory=None):
     # Building file path
     if directory != None:
@@ -26,7 +28,8 @@ def ls(directory=None):
     
    # Content list & Error Handling
     try:
-       items = os.listdir()
+       items = os.listdir(path)
+
        # Checking if directory is empty
        if len(items) == 0:
         print("(empty directory)")
@@ -46,29 +49,28 @@ def ls(directory=None):
 
 # Changing Directory
 def cd(destination, directory=None):
-   # Building file path
-   if directory != None:
-      new_path = os.path.join(directory, destination)
-   else:
-      new_path = os.path.join(os.getcwd(), destination)
+    # Building file path
+    if directory != None:
+        new_path = os.path.join(directory, destination)
+    else:
+        new_path = os.path.join(os.getcwd(), destination)
 
-     # Normalizing file path
-      new_path = os.path.normpath(new_path)
+    # Normalizing file path
+    new_path = os.path.normpath(new_path)
       
     # Checking if file path exists
-      if not os.path.exists(new_path):
+    if not os.path.exists(new_path):
         print(f"Error: '{new_path}' does not exist")
-        return False
+        return None
       
-      # Checking if it is directory
-      if not os.path.isdir(new_path):
-         print(f"Error: '{new_path}' is not a directory")
-         return False
+    # Checking if it is directory
+    if not os.path.isdir(new_path):
+        print(f"Error: '{new_path}' is not a directory")
+        return None
       
     # Returning new path for main.py file
-   return new_path
+    return new_path
 
-         
 
 
           
