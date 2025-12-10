@@ -23,7 +23,7 @@ def create_folder(folder_name, directory=None):
     else:
         full_path = os.path.join(os.getcwd(), folder_name)
 
-    # Normalizing the path
+    # Normalizing the path for every Operating System
     full_path = os.path.normpath(full_path)
     
     # Checking if folder already exists
