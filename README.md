@@ -55,18 +55,31 @@ cli-file-manager/
 ## Available Commands
 
 `pwd` - Show the current directory
+
 `ls` - List the contents of the current directory
+
 `cd <path>` - Change directory
+
 `view <file>` - Display file contents
+
 `cat <file>` - Alternative to `view`
+
 `touch <file>` - Create an empty file or update timestamps
-`rm <file>` - Delete a file
+
+`rm <file>` - Delete a 
+
 `rm -r <folder>` - Delete a folder and its contents
+
 `rm -rf <folder>` - Delete a folder recursively without confirmation
+
 `mv <source> <destination>` - Move or rename a file
+
 `mkdir <folder>` - Create a folder
+
 `rmdir <folder>` - Delete an empty folder
+
 `help` - Show available commands
+
 `exit`/`quit` - Exit the application
 
 ## Example Usage
