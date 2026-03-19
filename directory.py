@@ -1,21 +1,5 @@
 import os
 
-'''
-The Following were used to help make the task effective:
-Pythons OS module for file reading:
-    os.path.join: safely combines folder and file names into full paths
-    os.path.isdir: checks if a path points to a directory(folder)
-    os.listdir: lists all files/folders inside a given directory
-    os.rmdir: deletes an empty directory
-    os.mkdir: creates a new directory(folder)
-
-Main Roles:
-Creating Files
-Deleting Files safely
-A Help Command System
-
-'''
-
 def create_folder(folder_name, directory=None):
     # Building the path
     if directory != None:
