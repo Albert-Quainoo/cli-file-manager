@@ -66,7 +66,7 @@ cli-file-manager/
 
 `touch <file>` - Create an empty file or update timestamps
 
-`rm <file>` - Delete a 
+`rm <file>` - Delete a file
 
 `rm -r <folder>` - Delete a folder and its contents
 
